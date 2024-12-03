@@ -1,6 +1,6 @@
 import {HiOutlineShoppingBag} from "react-icons/hi2";
 import {CiSearch} from "react-icons/ci";
-import Logo from "./../../../public/assets/logo.svg";
+import Logo from "/public/assets/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
