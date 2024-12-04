@@ -1,37 +1,14 @@
+"use client";
 import {HiOutlineShoppingBag} from "react-icons/hi2";
 import {CiSearch} from "react-icons/ci";
 import Logo from "/public/assets/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import {signOut, useSession} from "next-auth/react";
 
 const Navbar = () => {
-  const navItems = [
-    {
-      title: "Home",
-      path: "/",
-    },
-    {
-      title: "About",
-      path: "/about",
-    },
-    {
-      title: "Services",
-      path: "/services",
-    },
-    {
-      title: "MyBookings",
-      path: "/my-bookings",
-    },
-    {
-      title: "Blog",
-      path: "/blog",
-    },
-    {
-      title: "Contacts",
-      path: "/contacts",
-    },
-  ];
+  const session = useSession();
 
   return (
     <div className="navbar bg-base-100">
@@ -88,10 +65,46 @@ const Navbar = () => {
       <div className="navbar-end flex gap-3 items-center">
         <HiOutlineShoppingBag className="text-xl" />
         <CiSearch className="text-xl" />
-        <button className="btn btn-outline btn-primary">Appointment</button>
+        <a className="btn btn-outline btn-primary">Appointment</a>
+        {!session.data ? (
+          <Link className="btn btn-primary" href={"/login"}>
+            Login
+          </Link>
+        ) : (
+          <button className="btn btn-primary" onClick={() => signOut()}>
+            LogOut
+          </button>
+        )}
       </div>
     </div>
   );
 };
+
+const navItems = [
+  {
+    title: "Home",
+    path: "/",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Services",
+    path: "/services",
+  },
+  {
+    title: "MyBookings",
+    path: "/my-bookings",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+  {
+    title: "Contacts",
+    path: "/contacts",
+  },
+];
 
 export default Navbar;

@@ -1,12 +1,33 @@
 "use client";
 import SocialSignin from "@/components/SocialSignin/SocialSignin";
+import {signIn} from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 import React from "react";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const router = useRouter();
+
   const handleLogin = async (event) => {
     event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await signIn("credentials", {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        redirect: false,
+      });
+      if (response.status === 200) {
+        toast.success("Login successful!");
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error("Failed to log in. Please try again.");
+    }
   };
 
   return (
