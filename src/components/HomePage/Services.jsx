@@ -1,8 +1,10 @@
-import {services} from "@/lib/services";
 import React from "react";
 import ServiceCard from "./ServiceCard";
+import {getServices} from "@/lib/getServices";
 
-const Services = () => {
+const Services = async () => {
+  const {services} = await getServices();
+
   return (
     <div className="mb-24">
       <div className="text-center container mx-auto">
@@ -15,9 +17,10 @@ const Services = () => {
         </p>
       </div>
       <div className="container mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {services.map((service) => (
-          <ServiceCard key={service._id} service={service} />
-        ))}
+        {services?.length > 0 &&
+          services.map((service) => (
+            <ServiceCard key={service._id} service={service} />
+          ))}
       </div>
     </div>
   );
