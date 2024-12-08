@@ -1,16 +1,17 @@
 "use client";
+
 import SocialSignin from "@/components/SocialSignin/SocialSignin";
 import {signIn} from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter, useSearchParams} from "next/navigation";
-import React from "react";
+import React, {Suspense} from "react";
 import toast from "react-hot-toast";
 
-const Login = () => {
+const LoginForm = () => {
   const router = useRouter();
-  const searchParams = useSearchParams()
-  const path = searchParams.get('redirect')
+  const searchParams = useSearchParams();
+  const path = searchParams.get("redirect");
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -22,9 +23,9 @@ const Login = () => {
         email: formData.get("email"),
         password: formData.get("password"),
         redirect: true,
-        callbackUrl: path ?path : '/'
+        callbackUrl: path ? path : "/",
       });
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success("Login successful!");
         router.push("/");
       }
@@ -33,6 +34,32 @@ const Login = () => {
     }
   };
 
+  return (
+    <form onSubmit={handleLogin}>
+      <label htmlFor="email">Email</label> <br />
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter Your Email"
+        className="mt-3 w-full input input-bordered"
+      />
+      <br /> <br />
+      <label htmlFor="password">Password</label> <br />
+      <input
+        type="password"
+        name="password"
+        placeholder="Type Password"
+        className="w-full mt-3 input input-bordered"
+      />
+      <br />
+      <button type="submit" className="w-full btn btn-primary mt-12 text-lg">
+        Sign In
+      </button>
+    </form>
+  );
+};
+
+const Login = () => {
   return (
     <div className="container px-32 mx-auto py-16">
       <div className="grid grid-cols-2 gap-12 items-center">
@@ -48,30 +75,9 @@ const Login = () => {
           <h1 className="text-3xl font-semibold text-primary text-center mb-12">
             Sign In
           </h1>
-          <form onSubmit={handleLogin}>
-            <label htmlFor="email">Email</label> <br />
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Your Email"
-              className="mt-3 w-full input input-bordered"
-            />
-            <br /> <br />
-            <label htmlFor="password">Password</label> <br />
-            <input
-              type="password"
-              name="password"
-              placeholder="Type Password"
-              className="w-full mt-3 input input-bordered"
-            />
-            <br />
-            <button
-              type="submit"
-              className="w-full btn btn-primary mt-12 text-lg"
-            >
-              Sign In
-            </button>
-          </form>
+          <Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+          </Suspense>
           <div>
             <h6 className="my-6 text-center">or sign in with</h6>
             <SocialSignin />
