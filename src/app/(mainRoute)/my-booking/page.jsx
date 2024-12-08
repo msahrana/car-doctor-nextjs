@@ -3,6 +3,7 @@ import {useSession} from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
+import toast from "react-hot-toast";
 
 const MyBooking = () => {
   const session = useSession();
@@ -27,6 +28,20 @@ const MyBooking = () => {
       loadData();
     }
   }, [session]);
+
+  const handleDelete = async (id) => {
+    const deleted = await fetch(
+      `http://localhost:3000/my-booking/api/booking/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    const res = await deleted.json();
+    if (res?.response?.deletedCount > 0) {
+      toast.success(res?.message);
+      loadData();
+    }
+  };
 
   return (
     <div className="container mx-auto">
@@ -63,28 +78,35 @@ const MyBooking = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(({serviceTitle, _id, date, price, name,email}, index) => (
-              <tr key={_id}>
-                <th>{index + 1}</th>
-                <th>{name}: <span className="text-sm font-normal text-green-200">{email}</span></th>
-                <td>{serviceTitle}</td>
-                <td>{price}</td>
-                <td>{date}</td>
-                <td>
-                  <Link href={`/my-booking/update/${_id}`}>
-                    <button class="btn btn-primary">Edit</button>
-                  </Link>
-                </td>
-                <th>
-                  <button
-                    // onClick={() => handleDelete(_id)}
-                    class="btn btn-error"
-                  >
-                    Delete
-                  </button>
-                </th>
-              </tr>
-            ))}
+            {bookings.map(
+              ({serviceTitle, _id, date, price, name, email}, index) => (
+                <tr key={_id}>
+                  <th>{index + 1}</th>
+                  <th>
+                    {name}:{" "}
+                    <span className="text-sm font-normal text-green-200">
+                      {email}
+                    </span>
+                  </th>
+                  <td>{serviceTitle}</td>
+                  <td>{price}</td>
+                  <td>{date}</td>
+                  <td>
+                    <Link href={`/my-booking/update/${_id}`}>
+                      <button class="btn btn-primary">Edit</button>
+                    </Link>
+                  </td>
+                  <th>
+                    <button
+                      onClick={() => handleDelete(_id)}
+                      class="btn btn-error"
+                    >
+                      Delete
+                    </button>
+                  </th>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
