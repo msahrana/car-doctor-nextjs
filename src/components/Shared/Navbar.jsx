@@ -9,7 +9,7 @@ import {signOut, useSession} from "next-auth/react";
 
 const Navbar = () => {
   const session = useSession();
-  console.log(session)
+  console.log(session);
 
   return (
     <div className="navbar bg-base-100">
@@ -96,7 +96,7 @@ const navItems = [
   },
   {
     title: "MyBookings",
-    path: "/my-bookings",
+    path: "/my-booking",
   },
   {
     title: "Blog",

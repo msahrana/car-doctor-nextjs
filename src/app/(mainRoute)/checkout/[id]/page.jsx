@@ -3,6 +3,7 @@ import {getServicesDetails} from "@/lib/getServices";
 import {useSession} from "next-auth/react";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
+import toast from "react-hot-toast";
 
 const Checkout = ({params}) => {
   const {data} = useSession();
@@ -37,6 +38,10 @@ const Checkout = ({params}) => {
       },
     });
     console.log(res);
+    if (res.status === 200) {
+      toast.success("Service Booking Successfully!");
+      event.target.reset();
+    }
   };
 
   useEffect(() => {
