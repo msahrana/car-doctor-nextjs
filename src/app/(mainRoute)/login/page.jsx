@@ -3,12 +3,14 @@ import SocialSignin from "@/components/SocialSignin/SocialSignin";
 import {signIn} from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const path = searchParams.get('redirect')
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -19,7 +21,8 @@ const Login = () => {
       const response = await signIn("credentials", {
         email: formData.get("email"),
         password: formData.get("password"),
-        redirect: false,
+        redirect: true,
+        callbackUrl: path ?path : '/'
       });
       if (response.status === 200) {
         toast.success("Login successful!");

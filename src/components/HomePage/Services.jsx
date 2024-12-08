@@ -6,7 +6,7 @@ const Services = async () => {
   const {services} = await getServices();
 
   return (
-    <div className="mb-24">
+    <div className="container mx-auto mb-24">
       <div className="text-center container mx-auto">
         <h3 className="text-2xl font-bold text-orange-600">Our Services</h3>
         <h2 className="text-5xl">Our Service Area</h2>
